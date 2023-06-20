@@ -1,0 +1,211 @@
+*************Flower Mart***********************************
+
+The main objective of this project is building a website which will help florist too sell their flower. They can directly register in the site and sell their product online.Effective marketing and promotion strategies will be in place to attract customers, inform them of new products, increase sales. On the other side, customer have a wide varieties of flower to choose at an handsome amount of money. We even provide service on the contract basis.
+
+-----------------------------------------------------------------------------------------
+
+CREATE TABLE customers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(255),
+  phone_number int unique,
+  login_id VARCHAR(50) UNIQUE,
+  password VARCHAR(255) ,
+  CONSTRAINT ckd_pass CHECK(length(password)>7),
+  CONSTRAINT ckd_phone_no CHECK(length(phone_number)=10)
+)auto_increment=101;
+
+ mysql>  desc customers;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int          | NO   | PRI | NULL    | auto_increment |
+| name         | varchar(50)  | YES  |     | NULL    |                |
+| email        | varchar(255) | YES  |     | NULL    |                |
+| phone_number | bigint       | YES  | UNI | NULL    |                |
+| login_id     | varchar(50)  | YES  | UNI | NULL    |                |
+| password     | varchar(255) | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+
+CREATE TABLE customer_addresses (
+  customer_id INT,
+  address VARCHAR(255),
+  city VARCHAR(50),
+  state VARCHAR(50),
+  pin_code VARCHAR(10) check(length(pin_code)=6),
+  CONSTRAINT fk_add_id FOREIGN KEY (customer_id) REFERENCES customers(id)  
+);
+
+mysql>  desc customer_addresses;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| customer_id | int          | YES  | MUL | NULL    |       |
+| address     | varchar(255) | YES  |     | NULL    |       |
+| city        | varchar(50)  | YES  |     | NULL    |       |
+| state       | varchar(50)  | YES  |     | NULL    |       |
+| pin_code    | varchar(10)  | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+
+
+CREATE TABLE florists (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  florist_name VARCHAR(50),
+  email VARCHAR(255),
+  phone_number int8,
+  CONSTRAINT ckd_f_phone_no CHECK(length(phone_number)=10)
+);
+
+mysql>  desc florists;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | int          | NO   | PRI | NULL    | auto_increment |
+| florist_name | varchar(50)  | YES  |     | NULL    |                |
+| email        | varchar(255) | YES  |     | NULL    |                |
+| phone_number | bigint       | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+
+CREATE TABLE florist_addresses (
+  florist_id INT ,
+  address VARCHAR(255),
+  city VARCHAR(50),
+  state VARCHAR(50),
+  pin_code VARCHAR(10),
+  constraint fk_f_add_id FOREIGN KEY (florist_id) REFERENCES florists(id)
+);
+
+mysql>  desc florist_addresses ;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| florist_id | int          | YES  | MUL | NULL    |       |
+| address    | varchar(255) | YES  |     | NULL    |       |
+| city       | varchar(50)  | YES  |     | NULL    |       |
+| state      | varchar(50)  | YES  |     | NULL    |       |
+| pin_code   | varchar(10)  | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+
+
+CREATE TABLE flowers (
+  id INT PRIMARY KEY auto_increment,
+  flower_name VARCHAR(50) UNIQUE,
+  florist_id INT,
+  description VARCHAR(255),
+  price int,
+  constraint fk_flr_id FOREIGN KEY (florist_id) REFERENCES florists(id)
+);
+
+mysql>  desc flowers ;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int          | NO   | PRI | NULL    | auto_increment |
+| flower_name | varchar(50)  | YES  | UNI | NULL    |                |
+| florist_id  | int          | YES  | MUL | NULL    |                |
+| description | varchar(255) | YES  |     | NULL    |                |
+| price       | int          | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+
+
+CREATE TABLE orders(
+  id int PRIMARY KEY auto_increment,
+  customer_id int,
+  flower_id int,
+  order_date date,
+  delivery_date date default null,
+  qty int default 0,
+  unit_price int,
+  total_price int default 0,
+  constraint fk_o_cust_id FOREIGN KEY (customer_id) REFERENCES customers(id),
+  constraint fk_o_flow_id FOREIGN KEY (flower_id) REFERENCES Flowers(id)
+  )auto_increment=1001;
+
+
+mysql>  desc orders;
++---------------+------+------+-----+---------+----------------+
+| Field         | Type | Null | Key | Default | Extra          |
++---------------+------+------+-----+---------+----------------+
+| id            | int  | NO   | PRI | NULL    | auto_increment |
+| customer_id   | int  | YES  | MUL | NULL    |                |
+| flower_id     | int  | YES  | MUL | NULL    |                |
+| order_date    | date | YES  |     | NULL    |                |
+| delivery_date | date | YES  |     | NULL    |                |
+| qty           | int  | YES  |     | 0       |                |
+| unit_price    | int  | YES  |     | NULL    |                |
+| total_price   | int  | YES  |     | 0       |                |
++---------------+------+------+-----+---------+----------------+
+
+
+CREATE TABLE contract_services (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  customer_id INT,
+  flower_id INT,
+  qty_daily INT,
+  unit_price INT,
+  start_date DATE,
+  end_date DATE,
+  Total_price_monthly INT ,
+  CONSTRAINT fk_cs_cust_id FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT fk_cs_flw_id FOREIGN KEY (flower_id) REFERENCES flowers(id)
+)auto_increment=1111;
+
+mysql>  desc contract_services;
++---------------------+------+------+-----+---------+----------------+
+| Field               | Type | Null | Key | Default | Extra          |
++---------------------+------+------+-----+---------+----------------+
+| id                  | int  | NO   | PRI | NULL    | auto_increment |
+| customer_id         | int  | YES  | MUL | NULL    |                |
+| flower_id           | int  | YES  | MUL | NULL    |                |
+| qty_daily           | int  | YES  |     | NULL    |                |
+| unit_price          | int  | YES  |     | NULL    |                |
+| start_date          | date | YES  |     | NULL    |                |
+| end_date            | date | YES  |     | NULL    |                |
+| Total_price_monthly | int  | YES  |     | NULL    |                |
++---------------------+------+------+-----+---------+----------------+
+
+CREATE TABLE stocks(
+  florist_id INT,
+  flower_id INT,
+  quantity INT,
+  CONSTRAINT fk_stock_florist_id FOREIGN KEY (florist_id) REFERENCES florists(id),
+  CONSTRAINT fk_stock_flower_id FOREIGN KEY (flower_id) REFERENCES flowers(id)
+);
+
+
+mysql>  desc stocks ;
++------------+------+------+-----+---------+-------+
+| Field      | Type | Null | Key | Default | Extra |
++------------+------+------+-----+---------+-------+
+| florist_id | int  | YES  | MUL | NULL    |       |
+| flower_id  | int  | YES  | MUL | NULL    |       |
+| quantity   | int  | YES  |     | NULL    |       |
++------------+------+------+-----+---------+-------+
+
+
+CREATE TABLE order_stocks(
+  id int primary key auto_increment,
+  florist_id INT,
+  flower_id INT,
+  order_quantity INT,
+  order_date date,
+  CONSTRAINT fk_orders_stock_florist_id FOREIGN KEY (florist_id) REFERENCES florists(id),
+  CONSTRAINT fk_orders_stock_flower_id FOREIGN KEY (flower_id) REFERENCES flowers(id)
+)auto_increment=121;
+
+
+mysql> desc order_stocks;
++----------------+------+------+-----+---------+----------------+
+| Field          | Type | Null | Key | Default | Extra          |
++----------------+------+------+-----+---------+----------------+
+| id             | int  | NO   | PRI | NULL    | auto_increment |
+| florist_id     | int  | YES  | MUL | NULL    |                |
+| flower_id      | int  | YES  | MUL | NULL    |                |
+| order_quantity | int  | YES  |     | NULL    |                |
+| order_date     | date | YES  |     | NULL    |                |
++----------------+------+------+-----+---------+----------------+
+
+
+

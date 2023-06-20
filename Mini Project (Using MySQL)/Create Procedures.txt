@@ -1,0 +1,127 @@
+
+
+1)procedure 1:  Create Email Address For Customer ;
+
+delimiter $$
+Create procedure generate_email_id()
+begin
+update customers
+set email=concat(substr(name,1,5),customer_id,'@gmail.com');
+end $$
+delimiter ;
+
+call generate_email_id();
+
+
+
+2)procedure 2:  Generates Login Id and Password using concat ;
+
+delimiter $$
+Create procedure generate_login_id_password()
+begin
+update customers
+set login_id=concat(substr(phone_number,-4,4));
+update customers
+set password=concat(customer_id,substr(phone_number,1,5));
+end $$
+delimiter ;
+
+call generate_login_id_password();
+
+
+Procedure 3: Create Email Address For florist ;
+
+delimiter $$
+Create procedure generate_email_id_florists()
+begin
+update florists
+set email=concat(substr(florist_name,1,5),florist_id,'@gmail.com');
+end $$
+delimiter ;
+
+call generate_email_id_florists();
+
+
+Procedure 4:  Placeing  Orders ;
+
+delimiter $$
+create procedure order_placed(in iflower_id int,in icustomer_id int,in iqty int)
+begin
+declare v_price int;
+declare v_total_price int;
+set v_price = (select price from flowers where flower_id=iflower_id);
+set v_total_price=iqty*v_price;
+Insert into orders(customer_id,flower_id,order_date,delivery_date,qty,unit_price,total_price)
+values(icustomer_id,iflower_id,curdate(),date_add(curdate(),interval +1 day),iqty,v_price,v_total_price);
+end $$
+delimiter ;
+
+call order_placed(11,101,5);
+
+call order_placed(13,103,15);
+call order_placed(14,104,12);
+call order_placed(15,105,10);
+
+
+
+Procedure 5:   taking Orders on Contract Basis ;
+
+delimiter $$
+create procedure contract_service_order_placed(in iflower_id int,in icustomer_id int,in iqty int)
+begin
+declare v_price int;
+declare v_total_price_monthly int;
+set v_price = (select price from flowers where flower_id=iflower_id);
+if iqty>10 then 
+set v_total_price_monthly=(iqty*v_price*30-(iqty*v_price*30*0.1));
+else
+set v_total_price_monthly=iqty*v_price*30;
+end if;
+Insert into contract_services(customer_id,flower_id,qty_daily,unit_price,start_date,end_date,total_price_monthly)
+values(icustomer_id,iflower_id,iqty,v_price,curdate(),date_add(curdate(),interval +1 month),v_total_price_monthly);
+end $$
+delimiter ;
+
+call contract_service_order_placed(11,101,5);
+call contract_service_order_placed(12,102,12);
+
+===========================================================================================
+
+-->>TRIGGERS 1 : When Order is placed the ordered Qty will be Substract From The Total Qty
+for ex:- call order_placed(12,102,25);
+
+create trigger update_stock_order
+after insert on orders
+for each row
+update stocks
+set quantity=quantity-new.qty
+where flower_id=new.flower_id;
+
+
+-->>TRIGGERS 2 : When Contract Base Order is placed the ordered Qty will be Substract From The Total Qty  for Ex : - call contract_service_order_placed(13,103,8);
+
+create trigger update_stock_contract_services
+after insert on contract_services
+for each row
+update stocks
+set quantity=quantity-new.qty_daily
+where flower_id=new.flower_id;
+
+
+
+-->>Trigger 3: Trigger on order_stocks Table:  it will order extra Stock if the qty will goes below 20 ;
+
+delimiter $$
+create trigger order_stock_qty
+after update on stocks
+for each row
+begin
+if(new.quantity<20)
+then
+insert into order_stocks(florist_id,flower_id,order_quantity,order_date)
+values(new.florist_id,new.flower_id,new.quantity+200,curdate());
+end if;
+end $$
+delimiter ;
+
+

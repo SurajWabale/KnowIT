@@ -1,0 +1,42 @@
+// DROP TABLES 
+
+drop table customers;
+drop table customer_addresses;
+drop table florists;
+drop table florist_addresses;
+drop table flowers;
+drop table orders;
+drop table contract_services;
+drop table stocks;
+drop table order_stocks;
+
+
+drop table order_stocks;
+drop trigger order_stock_qty ;
+
+
+// DROP PROCEDURE
+
+drop procedure generate_email_id;
+drop procedure generate_login_id_password;
+drop procedure generate_email_id_florists;
+drop procedure order_placed; 
+drop procedure contract_service_order_placed;
+
+
+// DROP TRIGGERS
+
+drop trigger update_stock_order ; 
+drop trigger update_stock_contract_services ; 
+drop trigger order_stock_qty ;
+
+// DESC TABLES ;
+
+ desc customers;
+ desc customer_addresses;
+ desc florists;
+ desc florist_addresses ;
+ desc flowers ;
+ desc orders;
+ desc contract_services;
+ desc stocks ;

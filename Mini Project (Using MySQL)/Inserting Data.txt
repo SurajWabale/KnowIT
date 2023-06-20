@@ -1,0 +1,432 @@
+
+CREATE TABLE customers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(255),
+  phone_number int8 unique,
+  login_id VARCHAR(50) UNIQUE,
+  password VARCHAR(255) ,
+  CONSTRAINT ckd_pass CHECK(length(password)>7),
+  CONSTRAINT ckd_phone_no CHECK(length(phone_number)=10)
+)auto_increment=101;
+
+INSERT INTO customers (id,name,phone_number)
+VALUES(101,'Shubham Swami',9156745336);
+INSERT INTO customers (Name, phone_number)
+VALUES('Tushar Shingade',8329411054),
+      ('Vishwajit Patil', 9130395596),
+	  ('Yohan Jirage',7028936438),
+	  ('Sagar Patil',8329735812);
+
+delimiter $$
+Create procedure generate_email_id()
+begin
+update customers
+set email=concat(substr(name,1,5),id,'@gmail.com');
+end $$
+delimiter ;
+
+call generate_email_id();
+
+
+delimiter $$
+Create procedure generate_login_id_password()
+begin
+update customers
+set login_id=concat(substr(phone_number,-4,4));
+update customers
+set password=concat(id,substr(phone_number,1,5));
+end $$
+delimiter ;
+
+call generate_login_id_password();
+
+select * from customers;
+
+mysql> select * from customers;
++-----+-----------------+--------------------+--------------+----------+----------+
+| id  | name            | email              | phone_number | login_id | password |
++-----+-----------------+--------------------+--------------+----------+----------+
+| 101 | Shubham Swami   | Shubh101@gmail.com |   9156745336 | 5336     | 10191567 |
+| 102 | Tushar Shingade | Tusha102@gmail.com |   8329411054 | 1054     | 10283294 |
+| 103 | Vishwajit Patil | Vishw103@gmail.com |   9130395596 | 5596     | 10391303 |
+| 104 | Yohan Jirage    | Yohan104@gmail.com |   7028936438 | 6438     | 10470289 |
+| 105 | Sagar Patil     | Sagar105@gmail.com |   8329735812 | 5812     | 10583297 |
++-----+-----------------+--------------------+--------------+----------+----------+
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE customer_addresses (
+  customer_id INT,
+  address VARCHAR(255),
+  city VARCHAR(50),
+  state VARCHAR(50),
+  pin_code VARCHAR(10) check(length(pin_code)=6),
+  CONSTRAINT fk_add_id FOREIGN KEY (customer_id) REFERENCES customers(id)  
+);
+
+INSERT INTO customer_addresses(customer_id,address,city,state,pin_code)
+VALUES (101,'Shivajinagar','Pune','Maharastra','411003'),
+       (102,'Pandharpur','Solapur','Maharastra','413304'),
+       (103,'Panvel','Raigad','Maharastra', '410106'),
+	 (104,'Kalyan','Thane', 'Maharastra', '421002'),
+	 (105,'Rajgurunagar','Pune','Maharastra','410505');
+
+mysql> select * from customer_addresses;
++-------------+--------------+---------+------------+----------+
+| customer_id | address      | city    | state      | pin_code |
++-------------+--------------+---------+------------+----------+
+|         101 | Shivajinagar | Pune    | Maharastra | 411003   |
+|         102 | Pandharpur   | Solapur | Maharastra | 413304   |
+|         103 | Panvel       | Raigad  | Maharastra | 410106   |
+|         104 | Kalyan       | Thane   | Maharastra | 421002   |
+|         105 | Rajgurunagar | Pune    | Maharastra | 410505   |
++-------------+--------------+---------+------------+----------+
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE florists (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  florist_name VARCHAR(50),
+  email VARCHAR(255),
+  phone_number int8,
+  CONSTRAINT ckd_f_phone_no CHECK(length(phone_number)=10)
+);
+
+INSERT INTO florists (id, florist_name,phone_number)
+VALUES (111,'Aniket Kudale',9370935960);
+INSERT INTO florists(florist_name,phone_number)
+VALUES('Shubham Thomabre',8888248488),
+      ('Suraj Wabale',8976156833),
+      ('Kiran Godase',9552014803),
+      ('Sumit Ghodke',7057248760);
+
+delimiter $$
+Create procedure generate_email_id_florists()
+begin
+update florists
+set email=concat(substr(florist_name,1,5),id,'@gmail.com');
+end $$
+delimiter ;
+
+call generate_email_id_florists();
+
+select * from florists ;
+
+mysql> select * from florists ;
++-----+------------------+--------------------+--------------+
+| id  | florist_name     | email              | phone_number |
++-----+------------------+--------------------+--------------+
+| 111 | Aniket Kudale    | Anike111@gmail.com |   9370935960 |
+| 112 | Shubham Thomabre | Shubh112@gmail.com |   8888248488 |
+| 113 | Suraj Wabale     | Suraj113@gmail.com |   8976156833 |
+| 114 | Kiran Godase     | Kiran114@gmail.com |   9552014803 |
+| 115 | Sumit Ghodke     | Sumit115@gmail.com |   7057248760 |
++-----+------------------+--------------------+--------------+
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE florist_addresses (
+  florist_id INT ,
+  address VARCHAR(255),
+  city VARCHAR(50),
+  state VARCHAR(50),
+  pin_code VARCHAR(10),
+  constraint fk_f_add_id FOREIGN KEY (florist_id) REFERENCES florists(id)
+);
+
+INSERT INTO florist_addresses(florist_id, address, city, state, pin_code)
+VALUES (111, 'Satana', 'Nasik', 'Maharastra', '411325'),
+ 	   (112, 'Chalisgoan', 'Jalgoan', 'Maharastra', '413512'),
+ 	   (113, 'Dadar', 'Mumbai', 'Maharastra', '400705'),
+	   (114, 'Baramati', 'Pune', 'Maharastra', '422369'),
+       (115, 'Karad', 'Satara', 'Maharastra', '412568');
+
+select * from florist_addresses ;
+
+mysql> select * from florist_addresses ;
++------------+------------+---------+------------+----------+
+| florist_id | address    | city    | state      | pin_code |
++------------+------------+---------+------------+----------+
+|        111 | Satana     | Nasik   | Maharastra | 411325   |
+|        112 | Chalisgoan | Jalgoan | Maharastra | 413512   |
+|        113 | Dadar      | Mumbai  | Maharastra | 400705   |
+|        114 | Baramati   | Pune    | Maharastra | 422369   |
+|        115 | Karad      | Satara  | Maharastra | 412568   |
++------------+------------+---------+------------+----------+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE flowers (
+  id INT PRIMARY KEY auto_increment,
+  flower_name VARCHAR(50) UNIQUE,
+  florist_id INT,
+  description VARCHAR(255),
+  price int,
+  constraint fk_flr_id FOREIGN KEY (florist_id) REFERENCES florists(id)
+);
+
+INSERT INTO flowers (id,flower_name,florist_id,description,price)
+VALUES (11,'Red Roses',111,'A flower of love with Thorn', 25);
+INSERT INTO flowers (flower_name,florist_id,description,price)
+VALUES('Goldish-yellow Marigold',112,'A medicinal and Garland flower',5),
+      ('Pink Lotus',113,'Symbolises beauty, purity and knowledge',40),
+	  ('White Jasmine',114,'Jasmine belongs to the olive family',15),
+      ('Pink Hibiscus',115,'Vibrant flower is used for ailments',20);
+
+select * from flowers ;
+
+mysql> select * from flowers ;
++----+-------------------------+------------+-----------------------------------------+-------+
+| id | flower_name             | florist_id | description
+          | price |
++----+-------------------------+------------+-----------------------------------------+-------+
+| 11 | Red Roses               |        111 | A flower of love with Thorn             |    25 |
+| 12 | Goldish-yellow Marigold |        112 | A medicinal and Garland flower          |     5 |
+| 13 | Pink Lotus              |        113 | Symbolises beauty, purity and knowledge |    40 |
+| 14 | White Jasmine           |        114 | Jasmine belongs to the olive family     |    15 |
+| 15 | Pink Hibiscus           |        115 | Vibrant flower is used for ailments     |    20 |
++----+-------------------------+------------+-----------------------------------------+-------+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE orders(
+  id int PRIMARY KEY auto_increment,
+  customer_id int,
+  flower_id int,
+  order_date date,
+  delivery_date date default null,
+  qty int default 0,
+  unit_price int,
+  total_price int default 0,
+  constraint fk_o_cust_id FOREIGN KEY (customer_id) REFERENCES customers(id),
+  constraint fk_o_flow_id FOREIGN KEY (flower_id) REFERENCES flowers(id)
+  )auto_increment=1001;
+
+delimiter $$
+create procedure order_placed(in iflower_id int,in icustomer_id int,in iqty int)
+begin
+declare v_price int;
+declare v_total_price int;
+set v_price = (select price from flowers f where f.id=iflower_id);
+set v_total_price=iqty*v_price;
+Insert into orders(customer_id,flower_id,order_date,delivery_date,qty,unit_price,total_price)
+values(icustomer_id,iflower_id,curdate(),date_add(curdate(),interval +1 day),iqty,v_price,v_total_price);
+end $$
+delimiter ;
+
+call order_placed(11,101,5);
+call order_placed(12,102,25);
+call order_placed(13,103,15);
+call order_placed(14,104,12);
+call order_placed(15,105,10);
+
+select * from orders;
+
+mysql> select * from orders;
++------+-------------+-----------+------------+---------------+------+------------+-------------+
+| id   | customer_id | flower_id | order_date | delivery_date | qty  | unit_price | total_price |
++------+-------------+-----------+------------+---------------+------+------------+-------------+
+| 1001 |         101 |        11 | 2023-05-26 | 2023-05-27    |    5 |         25 |         125 |
+| 1002 |         102 |        12 | 2023-05-26 | 2023-05-27    |   25 |
+5 |         125 |
+| 1003 |         103 |        13 | 2023-05-26 | 2023-05-27    |   15 |         40 |         600 |
+| 1004 |         104 |        14 | 2023-05-26 | 2023-05-27    |   12 |         15 |         180 |
+| 1005 |         105 |        15 | 2023-05-26 | 2023-05-27    |   10 |         20 |         200 |
++------+-------------+-----------+------------+---------------+------+------------+-------------+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE contract_services (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  customer_id INT,
+  flower_id INT,
+  qty_daily INT,
+  unit_price INT,
+  start_date DATE,
+  end_date DATE,
+  Total_price_monthly INT ,
+  CONSTRAINT fk_cs_cust_id FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT fk_cs_flw_id FOREIGN KEY (flower_id) REFERENCES flowers(id)
+)auto_increment=1111;
+
+
+delimiter $$
+create procedure contract_service_order_placed(in iflower_id int,in icustomer_id int,in iqty int)
+begin
+declare v_price int;
+declare v_total_price_monthly int;
+set v_price = (select price from flowers f where f.id=iflower_id);
+if iqty>10 then 
+set v_total_price_monthly=(iqty*v_price*30-(iqty*v_price*30*0.1));
+else
+set v_total_price_monthly=iqty*v_price*30;
+end if;
+Insert into contract_services(customer_id,flower_id,qty_daily,unit_price,start_date,end_date,total_price_monthly)
+values(icustomer_id,iflower_id,iqty,v_price,curdate(),date_add(curdate(),interval +1 month),v_total_price_monthly);
+end $$
+delimiter ;
+
+call contract_service_order_placed(11,101,5);
+call contract_service_order_placed(12,102,12);
+call contract_service_order_placed(13,103,8);
+call contract_service_order_placed(14,104,15);
+call contract_service_order_placed(15,105,20);
+
+select * from contract_services ;
+
+
+mysql> select * from contract_services ;
++------+-------------+-----------+-----------+------------+------------+------------+---------------------+
+| id   | customer_id | flower_id | qty_daily | unit_price | start_date | end_date   | Total_price_monthly |
++------+-------------+-----------+-----------+------------+------------+------------+---------------------+
+| 1111 |         101 |        11 |         5 |         25 | 2023-05-26 | 2023-06-26 |                3750 |
+| 1112 |         102 |        12 |        12 |          5 | 2023-05-26 | 2023-06-26 |                1620 |
+| 1113 |         103 |        13 |         8 |         40 | 2023-05-26 | 2023-06-26 |                9600 |
+| 1114 |         104 |        14 |        15 |         15 | 2023-05-26 | 2023-06-26 |                6075 |
+| 1115 |         105 |        15 |        20 |         20 | 2023-05-26 | 2023-06-26 |               10800 |
++------+-------------+-----------+-----------+------------+------------+------------+---------------------+
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE stocks(
+  florist_id INT,
+  flower_id INT,
+  quantity INT,
+  CONSTRAINT fk_stock_florist_id FOREIGN KEY (florist_id) REFERENCES florists(id),
+  CONSTRAINT fk_stock_flower_id FOREIGN KEY (flower_id) REFERENCES flowers(id)
+);
+
+Insert into stocks
+values(111,11,100),
+      (112,12,250),
+      (113,13,300),
+      (114,14,400),
+      (115,15,350);  
+
+select * from stocks;  
+
+mysql> select * from stocks;
++------------+-----------+----------+
+| florist_id | flower_id | quantity |
++------------+-----------+----------+
+|        111 |        11 |      100 |
+|        112 |        12 |      250 |
+|        113 |        13 |      300 |
+|        114 |        14 |      400 |
+|        115 |        15 |      350 |
++------------+-----------+----------+
+
+create trigger update_stock_order
+after insert on orders
+for each row
+update stocks
+set quantity=quantity-new.qty
+where flower_id=new.flower_id;
+
+ call order_placed(12,102,25);
+
+mysql> call order_placed(12,102,25);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from stocks;
++------------+-----------+----------+
+| florist_id | flower_id | quantity |
++------------+-----------+----------+
+|        111 |        11 |      100 |
+|        112 |        12 |      225 |
+|        113 |        13 |      300 |
+|        114 |        14 |      400 |
+|        115 |        15 |      350 |
++------------+-----------+----------+
+
+create trigger update_stock_contract_services
+after insert on contract_services
+for each row
+update stocks
+set quantity=quantity-new.qty_daily
+where flower_id=new.flower_id;
+
+call contract_service_order_placed(13,103,8);
+
+mysql> call contract_service_order_placed(13,103,8);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from stocks;
++------------+-----------+----------+
+| florist_id | flower_id | quantity |
++------------+-----------+----------+
+|        111 |        11 |      100 |
+|        112 |        12 |      225 |
+|        113 |        13 |      292 |
+|        114 |        14 |      400 |
+|        115 |        15 |      350 |
++------------+-----------+----------+
+
+--------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE order_stocks(
+  id int primary key auto_increment,
+  florist_id INT,
+  flower_id INT,
+  order_quantity INT,
+  order_date date,
+  CONSTRAINT fk_orders_stock_florist_id FOREIGN KEY (florist_id) REFERENCES florists(id),
+  CONSTRAINT fk_orders_stock_flower_id FOREIGN KEY (flower_id) REFERENCES flowers(id)
+)auto_increment=121;
+
+
+delimiter $$
+create trigger order_stock_qty
+after update on stocks
+for each row
+begin
+if(new.quantity<20)
+then
+insert into order_stocks(florist_id,flower_id,order_quantity,order_date)
+values(new.florist_id,new.flower_id,new.quantity+200,curdate());
+end if;
+end $$
+delimiter ;
+
+////
+delimiter $$
+create trigger order_stock_qty
+after update on stocks
+for each row
+begin
+    if(new.quantity<20)
+    then
+        insert into order_stocks(florist_id, flower_id, order_quantity, order_date)
+        values(new.florist_id, new.flower_id, new.quantity+200, curdate());
+        update stocks 
+        set quantity = old.quantity+200
+        where florist_id = new.florist_id and flower_id = new.flower_id;
+    end if;
+end $$
+delimiter ;
+/////
+
+mysql> select * from stocks;
++------------+-----------+----------+
+| florist_id | flower_id | quantity |
++------------+-----------+----------+
+|        111 |        11 |      100 |
+|        112 |        12 |      225 |
+|        113 |        13 |      292 |
+|        114 |        14 |      400 |
+|        115 |        15 |      350 |
++------------+-----------+----------+
+
+mysql> select * from order_stocks;
+Empty set (0.00 sec)
+
+call contract_service_order_placed(13,103,290);
+mysql> select * from order_stocks;
+
++-----+------------+-----------+----------------+------------+
+| id  | florist_id | flower_id | order_quantity | order_date |
++-----+------------+-----------+----------------+------------+
+| 121 |        113 |        13 |            202 | 2023-05-26 |
++-----+------------+-----------+----------------+------------+

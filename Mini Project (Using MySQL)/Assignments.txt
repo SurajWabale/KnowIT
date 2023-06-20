@@ -1,0 +1,12 @@
+Assignments
+1. Create a Student entity for storing information like studentid, name, city, percentage.
+Generate hashCode based on city. Create HashSet of 5 students and observe how the students are arranged in the hashset
+collection.
+2. Create a tree set for Emp objects where Emp objects should be arranged on the basis of increasing salary.
+3. Repeat above assignment by using Comparator.
+4. Repeat above assignment using lambda expression
+5. Modify assignment no 2. Arrange all employess in the ascending order of dept. Within dept, arrange all employees in the
+decreasing order of salary. If salary is same, arrange all employees in the ascening order of their names. If names are same,
+arrange in the increasing order of empid. (Maintain empid, name, salary and dept for every emp)
+6. Accept 5 strings from the user. Use appropriate collection for storing strings in the increasing order of length. If length is same,
+arrange in the alphabetical sequence.
