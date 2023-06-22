@@ -1,0 +1,68 @@
+Document:System Requirement Specification Document
+
+Title:online parking slot booking
+
+Team:
+	Direct Customer, Indirect Customer,Architect, Business Analyst
+	Quality Assurance Team,
+	System Analyst
+
+Objective (Purpose):The main objective of the Project on Car Parking System is to manage the 
+                    details of Car, Parking, Parking Space, Parking Slot, Parking Area. It manages all the 
+                    information about Car, Parking Fees, Parking Area, Car. The project is totally built at 
+                    administrative end and thus only the administrator is guaranteed the access. The 
+                    purpose of the project is to build an application program to reduce the manual work for 
+                    managing the Car, Parking, Parking Fees, Parking Space. It tracks all the details about 
+                    the Parking Space, Parking Slot, Parking Area.
+
+
+Scope:
+An online car parking management system can provide numerous 
+benefits, including:
+1. Improved Efficiency: With an online car parking management system, drivers can 
+                        easily find available parking spots, while parking attendants can better manage the 
+                        parking lot to ensure optimal use of space.
+2. Cost Savings: By automating the parking management process, the need for manual 
+                 labour and associated costs can be reduced. Additionally, the system can help prevent 
+                 revenue loss due to unauthorized parking or unpaid parking fees.
+3. Increased Security: The system can provide real-time monitoring of the parking lot, 
+                       including the ability to detect and address any security threats or issues that may arise.
+4. Improved Customer Satisfaction: Drivers can enjoy a more streamlined and convenient 
+                                  parking experience, with the ability to quickly find available parking spots and pay for 
+                                  parking without having to physically interact with parking attendants.
+5. Enhanced Data Collection: The system can generate useful data about parking usage 
+                              patterns, which can be used to inform future decisions and improvements in the parking 
+                              management process.
+Definitions:
+	OPSB: Online Parking Slot Booking
+	QA:  Quality Assurance
+	Portal: Peronalized Online Web Application
+	MIS: Management Information System
+	CRM: Customer Relation Managment
+	BI:  Business Intelligence
+	Dashboard: Personalized information presented using  BI techniques such grid, score card, graph
+  
+ Requirements:
+ 
+              FR1: Admin must be able to Define new parking areas, specify a range of parking lots, 
+                  the parking cost per minute/hour, and other details.
+              FR2: admin must be able to update data of existing parking areas.
+              FR3: admin must be able to view the information of all registered parking areas.
+              FR4: The parking operator must be able to Send the vehicle plate number and reservation 
+                   password (Session ID) to a central server for verification once users check in.
+              FR5: parking operator must be able to Issue bills to users on checkout.
+              FR6: User must be able to Register for the service and enter personal and vehicle details.
+              FR7: User must be able to find a parking area from the list of areas, registered by parking 
+                   admins.
+                   
+  NonFunctional Requirement:
+                           NFR 1: Parking overview should have data displayed in real time.
+                           NFR 2: Booking should take place no more than 15 seconds.
+                           NFR 3: An email confirmation about successful booking should come in less than 5 
+                                  minutes.
+                           NFR 4: User should be notified upon unsuccessful booking of a parking slot.
+                           NFR 5: System should not stale if accessed by multiple users.
+                           NFR 6: System should not allow the booking of the same parking slot by multiple users at 
+                                  the same time.
+                        
+              
