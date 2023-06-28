@@ -8,7 +8,7 @@ app.listen(9000, function () {
     console.log("Server Started");
 })
 
-app.get('/login', function (req, res) {
+app.get('/', function (req, res) {
     res.sendFile(__dirname + "/login.html");
 })
 
