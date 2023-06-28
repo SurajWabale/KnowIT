@@ -2,7 +2,7 @@
 var exp = require('express');
 var bp = require('body-parser')
 var app = exp();
-app.use(exp.static('Public'));
+app.use(exp.static('/Public'));
 app.use(bp.urlencoded({extended: false}))
 app.listen(9000, function () {
     console.log("Server Started");
