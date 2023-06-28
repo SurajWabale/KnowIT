@@ -1,11 +1,11 @@
 
 var exp = require('express');
 var bp = require('body-parser')
-
+var path=require("path");
 var app = exp();
 app.use(bp.urlencoded({extended: false}))
 app.use()
-
+app.use(express.static(path.join(__dirname,'public')));
 app.listen(9000, function () {
     console.log("Server Started");
 })
